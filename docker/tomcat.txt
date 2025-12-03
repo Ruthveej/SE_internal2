@@ -1,0 +1,81 @@
+tomcat conf users
+
+///
+
+<?xml version="1.0" encoding="UTF-8"?>
+<tomcat-users xmlns="http://tomcat.apache.org/xml"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
+              version="1.0">
+
+  <!-- REQUIRED roles for Jenkins deployment -->
+  <role rolename="manager-gui"/>
+  <role rolename="manager-script"/>
+  <role rolename="manager-status"/>
+  <role rolename="manager-jmx"/>
+
+  <!-- Optional default roles -->
+  <role rolename="tomcat"/>
+  <role rolename="role1"/>
+
+  <!-- Your admin Jenkins user -->
+  <user username="admin" password="1234"
+        roles="manager-gui,manager-script,manager-status,manager-jmx"/>
+
+</tomcat-users>
+
+///
+
+Jenkins web 
+
+admin
+1234
+tomcat-admin-cred
+http://localhost:8081/manager/text/
+
+///
+
+uml refernces
+
+https://chatgpt.com/share/692efbbc-aac4-8007-828f-b7ec28fc02c3
+
+///
+
+word press
+
+version: '3.8'
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
+    restart: always
+    ports:
+      - "8088:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wp_user
+      WORDPRESS_DB_PASSWORD: wp_pass
+      WORDPRESS_DB_NAME: wordpress_db
+    depends_on:
+      - db
+    volumes:
+      - wordpress_data:/var/www/html
+
+  db:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress_db
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_pass
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  wordpress_data:
+  db_data:
+
+///
+
